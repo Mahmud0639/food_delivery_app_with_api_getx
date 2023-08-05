@@ -30,7 +30,7 @@ class RecommendedProductController extends GetxController{
       _isLoaded = true;
 
     }else{
-
+        print('Could not get product of recommended');
     }
   }
 }
