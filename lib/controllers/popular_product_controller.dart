@@ -5,6 +5,8 @@ import 'package:food_delivery_app/data/repository/popular_product_repo.dart';
 import 'package:food_delivery_app/models/product_model.dart';
 import 'package:get/get.dart';
 
+import '../models/cart_model.dart';
+
 class PopularProductController extends GetxController{
   final PopularProductRepo popularProductRepo;
 
@@ -55,6 +57,13 @@ class PopularProductController extends GetxController{
   int checkQuantity(int quantity){
     if(_inCartItems+quantity<0){
       Get.snackbar("Item count", "You can't reduce more!");
+//this part is only for the reducing problem solving...when we try to reduce after the 0 that has already shown after the tap the button in the box
+      //if _inCartItems is greater than 0 that means already cart has 3 added then we need to return -3 to make the equation 0
+      if(_inCartItems>0){
+        _quantity = -_inCartItems;//we return minus result from here because the equation is int get inCartItems => _inCartItems + _quantity; +3-3 = 0
+        return _quantity;
+      }
+
       return 0;
     }else if(_inCartItems+quantity>20){
       Get.snackbar("Item count", "You can't add more!");
@@ -71,6 +80,7 @@ class PopularProductController extends GetxController{
     var exist = false;
     exist = _cart.existInCart(products);
     print('exist or not '+exist.toString());
+
 
     if(exist){
       _inCartItems = _cart.getQuantity(products);
@@ -92,5 +102,16 @@ class PopularProductController extends GetxController{
       Get.snackbar("Add Item", "You should add at least one item to proceed further.");
     }*/
 
+    update();
+
   }
+
+  //getting all the items quantity from the cart controller
+ int get totalItems{
+    return _cart.totalItems;
+ }
+
+ List<CartModel> get getItems{
+    return _cart.getItems;
+ }
 }

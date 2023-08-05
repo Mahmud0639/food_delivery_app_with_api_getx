@@ -65,9 +65,6 @@ class CartController extends GetxController{
 
     }
 
-
-
-
   }
 
  bool existInCart(Products products){
@@ -93,4 +90,22 @@ class CartController extends GetxController{
 
 
   }
+
+  //for showing total quantity in the cart as notification number
+int get totalItems{
+    var totalQuantity = 0;
+
+    _items.forEach((key, value) {
+      totalQuantity += value.quantity!;//it will triggered the whole loop for every items of object of map and add all one after another and assign in the totalQuantity variable
+    });
+
+    return totalQuantity;
+}
+
+//we retrieve all the items make a list of them to show as recycler view that means in flutter as ListView.Builder
+List<CartModel> get getItems{
+    return _items.entries.map((e){
+      return e.value;
+    }).toList();
+}
 }

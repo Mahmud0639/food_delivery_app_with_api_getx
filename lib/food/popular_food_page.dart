@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/cart_page.dart';
 import 'package:food_delivery_app/controllers/cart_controller.dart';
 import 'package:food_delivery_app/controllers/popular_product_controller.dart';
 import 'package:food_delivery_app/main_food_page.dart';
@@ -49,6 +50,7 @@ class PopularFoodPage extends StatelessWidget {
                   )
                 ),
           )),
+          //icons
           Positioned(
               top: Dimensions.height_45,
               left: Dimensions.width_20,
@@ -61,7 +63,26 @@ class PopularFoodPage extends StatelessWidget {
                       Get.to(()=>MainFoodPage());
                     },
                       child: AppIcon(icon: Icons.arrow_back_ios)),
-                  AppIcon(icon: Icons.shopping_cart_outlined)
+                  GetBuilder<PopularProductController>(builder: (popularProduct){
+                    return Stack(
+                      children: [
+                        AppIcon(icon: Icons.shopping_cart_outlined),
+                        //or we can like this
+                        //Get.find<PopularProductController>().totalItems>=1?Container():Container()
+                        popularProduct.totalItems>=1?Positioned(
+                            right:0,top:0,
+                            child: GestureDetector(
+                                onTap:(){
+                                  Get.to(()=>CartPage());
+                    },
+                                child: AppIcon(icon: Icons.circle,size: 20,iconColor: Colors.transparent,backgroundColor: AppUsedColors.mainColor,))):Container(),
+                        popularProduct.totalItems>=1?Positioned(top: 3,right: 3,child: ManyUseText(text: popularProduct.totalItems.toString(),size: 12,color: Colors.white,)):Container()
+
+
+
+                      ],
+                    );
+                  })
                 ],
           )),
           Positioned(
@@ -138,16 +159,18 @@ class PopularFoodPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_10,right: Dimensions.width_10),
-                child: GestureDetector(
-                    onTap: (){
-                      popularProduct.addItem(productId);//we need to get the same product that is clicked by user with pageId and this is already over here with the help of "Get" and that is "productId"
-                    },
-                    child: ManyUseText(text: "\$ ${productId.price} | Add to cart",color: Colors.white,)),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.radius_20),
-                    color: AppUsedColors.mainColor
+              GestureDetector(
+                onTap: (){
+                  popularProduct.addItem(productId);
+                },
+                child: Container(
+                  padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_10,right: Dimensions.width_10),
+
+                      child: ManyUseText(text: "\$ ${productId.price} | Add to cart",color: Colors.white,),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(Dimensions.radius_20),
+                      color: AppUsedColors.mainColor
+                  ),
                 ),
               )
             ],

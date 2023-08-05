@@ -6,6 +6,7 @@ import 'package:food_delivery_app/food/recommended_food_details.dart';
 import 'package:food_delivery_app/main_food_page.dart';
 import 'package:food_delivery_app/routes/routes_helper.dart';
 import 'package:get/get.dart';
+import 'cart_page.dart';
 import 'helper/dependencies.dart' as dep;
 
 

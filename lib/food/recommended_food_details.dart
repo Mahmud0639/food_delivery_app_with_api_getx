@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/cart_page.dart';
+import 'package:food_delivery_app/controllers/cart_controller.dart';
+import 'package:food_delivery_app/controllers/popular_product_controller.dart';
 import 'package:food_delivery_app/controllers/recommended_product_controller.dart';
 import 'package:food_delivery_app/routes/routes_helper.dart';
 import 'package:food_delivery_app/utils/app_constants.dart';
@@ -17,6 +20,7 @@ class RecommendedFoodDetails extends StatelessWidget {
   Widget build(BuildContext context) {
 
     var recoProduct = Get.find<RecommendedProductController>().recommendedProductList[recommenPageId];
+    Get.find<PopularProductController>().initProduct(recoProduct, Get.find<CartController>());
 
 
     return Scaffold(
@@ -35,7 +39,27 @@ class RecommendedFoodDetails extends StatelessWidget {
                     },
                     child: AppIcon(icon: Icons.clear),
                   ),
-                  AppIcon(icon: Icons.shopping_cart_outlined)
+                  //AppIcon(icon: Icons.shopping_cart_outlined)
+                  GetBuilder<PopularProductController>(builder: (popularProduct){
+                    return Stack(
+                      children: [
+                        AppIcon(icon: Icons.shopping_cart_outlined),
+                        //or we can like this
+                        //Get.find<PopularProductController>().totalItems>=1?Container():Container()
+                        popularProduct.totalItems>=1?Positioned(
+                            right:0,top:0,
+                            child: GestureDetector(
+                                onTap:(){
+                                  Get.to(()=>CartPage());
+                    },
+                                child: AppIcon(icon: Icons.circle,size: 20,iconColor: Colors.transparent,backgroundColor: AppUsedColors.mainColor,))):Container(),
+                        popularProduct.totalItems>=1?Positioned(top: 3,right: 3,child: ManyUseText(text: popularProduct.totalItems.toString(),size: 12,color: Colors.white,)):Container()
+
+
+
+                      ],
+                    );
+                  })
                 ],
               ),
               bottom: PreferredSize(preferredSize: Size.fromHeight(20),
@@ -71,55 +95,72 @@ class RecommendedFoodDetails extends StatelessWidget {
             )
           ],
         ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,//if Icons are showing on the top of the appBar then we should use it in the Column
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_20,right: Dimensions.width_20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppIcon(icon: Icons.remove,backgroundColor: AppUsedColors.mainColor,iconSize: Dimensions.iconSize_24,),
-                ManyUseText(text: "\$ ${recoProduct.price} X  0",color: AppUsedColors.mainBlackColor,size: Dimensions.font_24,),
-                AppIcon(icon: Icons.add,backgroundColor: AppUsedColors.mainColor,iconSize: Dimensions.iconSize_24,)
-              ],
-            ),
+      bottomNavigationBar: GetBuilder<PopularProductController>(builder: (popularController){
+        return Column(
+          mainAxisSize: MainAxisSize.min,//if Icons are showing on the top of the appBar then we should use it in the Column
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_20,right: Dimensions.width_20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
 
-          ),
-          Container(
-            height: Dimensions.bottom_height_bar,
-            //padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_30,left: Dimensions.sizedBoxHeight_20,right: Dimensions.sizedBoxHeight_20,bottom: Dimensions.sizedBoxHeight_30),
-            padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_10,right: Dimensions.width_10),
-            decoration: BoxDecoration(
-              // color:Colors.black26,
-                color: AppUsedColors.buttonBackgroundColor,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimensions.radius_20),topRight: Radius.circular(Dimensions.radius_20))
-            ),
+                      onTap: (){
+                        popularController.setQuantity(false);
+                      },
+                      child: AppIcon(icon: Icons.remove,backgroundColor: AppUsedColors.mainColor,iconSize: Dimensions.iconSize_24,)),
+                  ManyUseText(text: "\$ ${recoProduct.price} X  ${popularController.inCartItems}",color: AppUsedColors.mainBlackColor,size: Dimensions.font_24,),
+                  GestureDetector(
 
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_20,right: Dimensions.width_20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Dimensions.radius_20),
-                      color: Colors.white
-                  ),
-                  child: Icon(Icons.favorite,color: AppUsedColors.mainColor,)
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_10,right: Dimensions.width_10),
-                  child: ManyUseText(text: "\$ ${recoProduct.price} | Add to cart",color: Colors.white,),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Dimensions.radius_20),
-                      color: AppUsedColors.mainColor
-                  ),
-                )
-              ],
+                      onTap: (){
+                          popularController.setQuantity(true);
+                      },
+                      child: AppIcon(icon: Icons.add,backgroundColor: AppUsedColors.mainColor,iconSize: Dimensions.iconSize_24,))
+                ],
+              ),
+
             ),
-          ),
-        ],
-      ),
+            Container(
+              height: Dimensions.bottom_height_bar,
+              //padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_30,left: Dimensions.sizedBoxHeight_20,right: Dimensions.sizedBoxHeight_20,bottom: Dimensions.sizedBoxHeight_30),
+              padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_10,right: Dimensions.width_10),
+              decoration: BoxDecoration(
+                // color:Colors.black26,
+                  color: AppUsedColors.buttonBackgroundColor,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimensions.radius_20),topRight: Radius.circular(Dimensions.radius_20))
+              ),
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_20,right: Dimensions.width_20),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(Dimensions.radius_20),
+                          color: Colors.white
+                      ),
+                      child: Icon(Icons.favorite,color: AppUsedColors.mainColor,)
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      popularController.addItem(recoProduct);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(top: Dimensions.sizedBoxHeight_10,bottom: Dimensions.sizedBoxHeight_10,left: Dimensions.width_10,right: Dimensions.width_10),
+                      child: ManyUseText(text: "\$ ${recoProduct.price} | Add to cart",color: Colors.white,),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(Dimensions.radius_20),
+                          color: AppUsedColors.mainColor
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },)
     );
   }
 }
