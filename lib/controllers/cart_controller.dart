@@ -12,6 +12,8 @@ class CartController extends GetxController{
   Map<int,CartModel> _items = {};//we want to save our items as model with the int id
   Map<int,CartModel> get items => _items;
 
+  List<CartModel> storageItems = [];
+
   //whenever add to cart button will be clicked then addItem() will be called but not directly it will be called from PopularProductController
   //that means PopularProductController will call this CartController's addItem()
   void addItem(Products products, int quantity){
@@ -31,7 +33,8 @@ class CartController extends GetxController{
                 img: value.img,
                 quantity: value.quantity!+quantity,//value.quantity is the quantity that was already saved and new quantity will be added here
                 isExist: true,
-                time: DateTime.now().toString()
+                time: DateTime.now().toString(),
+                products: products
             );
           });
 
@@ -56,7 +59,8 @@ class CartController extends GetxController{
               img: products.img,
               quantity: quantity,
               isExist: true,
-              time: DateTime.now().toString()
+              time: DateTime.now().toString(),
+              products: products
           );
         });
       }else{
@@ -64,6 +68,11 @@ class CartController extends GetxController{
       }
 
     }
+
+    //after adding every object of products we need to save them in the sharedPreferences
+    cartRepo.addToCartList(getItems);
+
+    update();
 
   }
 
@@ -106,6 +115,38 @@ int get totalItems{
 List<CartModel> get getItems{
     return _items.entries.map((e){
       return e.value;
+
     }).toList();
 }
+
+
+int get totalPrice{
+    var total = 0;
+
+    _items.forEach((key, value) {
+      total += value.price! * value.quantity!;
+    });
+
+    return total;
+}
+
+//for storage
+List<CartModel> getCartData(){//this will called when app will open from the scratch that means app will not be in the ram but previously added product user
+    setCart = cartRepo.getCartList();
+    return storageItems;
+}
+
+set setCart(List<CartModel> items){
+    storageItems = items;//storing data to storage
+
+    //putting data if not absent and it will put data while for first time user open the app because for the opening time there will not be any data available in the map list
+    for(int i=0; i<storageItems.length; i++){
+      _items.putIfAbsent(storageItems[i].products!.id!, () => storageItems[i]);
+    }
+
+}
+
+
+
+
 }

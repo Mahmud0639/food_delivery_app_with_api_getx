@@ -28,6 +28,19 @@ class ProductModel {
 }
 
 class Products {
+
+  int? id;
+  String? name;
+  String? description;
+  int? price;
+  int? stars;
+  String? img;
+  String? location;
+  String? createdAt;
+  String? updatedAt;
+  int? typeId;
+
+
   Products({
       this.id, 
       this.name, 
@@ -52,16 +65,19 @@ class Products {
     updatedAt = json['updated_at'];
     typeId = json['type_id'];
   }
-  int? id;
-  String? name;
-  String? description;
-  int? price;
-  int? stars;
-  String? img;
-  String? location;
-  String? createdAt;
-  String? updatedAt;
-  int? typeId;
+
+  Map<String,dynamic> toJson(){
+    return{
+      "id":this.id,
+      "name":this.name,
+      "price":this.price,
+      "img":this.img,
+      "location": this.location,
+      "created_at": this.createdAt,
+      "updated_at": this.updatedAt,
+      "type_id": this.typeId
+    };
+  }
 
 
 }

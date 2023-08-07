@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class Dimensions{
-
+//current mobile screen height is 640
   //here we can use to divide screenHeight or screenWidth no problem to find out the resolution
   static double screenHeight = Get.context!.height;
   static double screenWidth = Get.context!.width;
@@ -43,6 +43,8 @@ class Dimensions{
   static double iconSize_24 = screenHeight/26.67;
 
   static double bottom_height_bar = screenHeight/8;
+
+  static double splash_image = screenHeight/4.27;
 
 
 }
