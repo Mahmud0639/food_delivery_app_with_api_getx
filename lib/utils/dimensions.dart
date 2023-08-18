@@ -45,6 +45,9 @@ class Dimensions{
   static double bottom_height_bar = screenHeight/8;
 
   static double splash_image = screenHeight/4.27;
+  static double cart_history_image = screenHeight/9.85;
+  static double cart_history_page_appbar = screenHeight/7.53;
+  static double cart_history_page_padding_appbar = screenHeight/16;
 
 
 }

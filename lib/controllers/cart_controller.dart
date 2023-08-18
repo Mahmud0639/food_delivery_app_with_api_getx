@@ -113,7 +113,9 @@ int get totalItems{
 
 //we retrieve all the items make a list of them to show as recycler view that means in flutter as ListView.Builder
 List<CartModel> get getItems{
-    return _items.entries.map((e){
+    return _items.entries.map((e){//here one thing we need to keep in mind always that is at that time we will be able to make a return type of List like this
+      //when we have a map of value like this...that means Map<int,CartModel> and we want to make a List<CartModel> here the value part of the Map that is CartModel
+      //and the List<CartModel> is same. So to make a List<CartModel> from the Map<int,CartModel> we can use _items.entries.map((e)) like this.
       return e.value;
 
     }).toList();
@@ -145,6 +147,36 @@ set setCart(List<CartModel> items){
     }
 
 }
+
+//again put all the sharedPreferences cart data into the sharedPreferences with another key because we want to show these data in another cart page
+void addToHistory(){
+    cartRepo.addToCartHistoryList();
+    //after adding data into the sharedPreferences we want to clear all the data that is already saved in the map. So that immediately clear all the showing data in the cart
+  //and only then we can delete data of sharedPreferences data so that after opening our app it won't able to get data from the old data from the sharedPreferences
+  clear();
+}
+void clear(){
+    _items = {};//it will again insert empty map in the map
+    //after clearing all the cart data we want to get a reflect of the data removing so we used update() method of Getx
+    update();
+}
+
+List<CartModel> getCartHistory(){
+    return cartRepo.getHistoryList();
+}
+
+set setItems(Map<int,CartModel> setItems){
+    _items = {};//it will everytime make the cart empty after click on the one more button from cart history page
+    _items = setItems;
+}
+
+//after adding to the _items map now we need to show them as RecyclerView in flutter ListView.Builder so we need to call the addToCartList() to achieve that
+void addToCartList(){
+    cartRepo.addToCartList(getItems);
+    update();
+}
+
+
 
 
 
