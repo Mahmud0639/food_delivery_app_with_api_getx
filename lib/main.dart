@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/account/auth/sign_up_page.dart';
 import 'package:food_delivery_app/controllers/cart_controller.dart';
 import 'package:food_delivery_app/controllers/popular_product_controller.dart';
 import 'package:food_delivery_app/controllers/recommended_product_controller.dart';
@@ -8,6 +9,7 @@ import 'package:food_delivery_app/main_food_page.dart';
 import 'package:food_delivery_app/routes/routes_helper.dart';
 import 'package:food_delivery_app/splash_screen.dart';
 import 'package:get/get.dart';
+import 'account/auth/sign_in_page.dart';
 import 'cart_page.dart';
 import 'helper/dependencies.dart' as dep;
 
@@ -34,10 +36,10 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-          //home: SplashScreen(),
+          home: SignInPage(),
           //home: MainFoodPage(),
-          initialRoute: RoutesHelper.getSplash(),
-          getPages: RoutesHelper.routes,
+          //initialRoute: RoutesHelper.getSplash(),
+          //getPages: RoutesHelper.routes,
 
         );
       });

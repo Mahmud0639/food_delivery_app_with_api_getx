@@ -24,4 +24,20 @@ class ApiClient extends GetConnect implements GetxService{
       return Response(statusCode: 1,statusText: e.toString());
     }
   }
+
+  void updateHeader(String token){
+    _mainHeader = {
+      'Content-type':'application/json; charset=UTF-8',//Headers used to tell server that we need json type data or posting to server json type data
+      'Authorization':'Bearer $token',//here "Bearer" is the token type..when we use post request then we need to pass token and the type of token here is "Bearer"
+    };
+  }
+
+  Future<Response> postData(String uri,dynamic body) async{
+    try{
+     Response response = await post(uri, body,headers: _mainHeader);//here headers is an optional parameter so we need to declare as "headers:"
+      return response;
+    }catch(e){
+      return Response(statusCode: 1,statusText: e.toString());
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/account/account_page.dart';
+import 'package:food_delivery_app/account/auth/sign_up_page.dart';
 import 'package:food_delivery_app/cart_history.dart';
 import 'package:food_delivery_app/main_food_page.dart';
 import 'package:food_delivery_app/utils/app_used_colors.dart';
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   List pages = [
     MainFoodPage(),
-    Center(child: Container(child: Text("Next page"),)),
+   SignUpPage(),
    CartHistory(),
     AccountPage()
   ];
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
  /* @override
   void initState(){
     super.initState();
-   // _controller = PersistentTabController(initialIndex: 0);
+   _controller = PersistentTabController(initialIndex: 0);
   }*/
 
 /*  List<Widget> _buildScreens() {
